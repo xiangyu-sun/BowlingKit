@@ -10,8 +10,8 @@ import Foundation
 
 public struct SpareState: CompleteFrameState {
     public func ballsForScoring(_ frame: Frame) -> [UInt]? {
-        var frames = frame.ballKnockedDownRecord
-        let firstBallOfNextFrame = frame.getNextBallKnockedDownRecord(count: 1)
+        var frames = frame.ballsKnockedDown
+        let firstBallOfNextFrame = frame.getNextBallsKnockedDown(count: 1)
         if !firstBallOfNextFrame.isEmpty {
             frames.append(contentsOf: firstBallOfNextFrame)
         }

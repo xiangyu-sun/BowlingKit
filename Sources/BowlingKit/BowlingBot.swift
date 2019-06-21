@@ -1,0 +1,30 @@
+//
+//  File.swift
+//  
+//
+//  Created by 孙翔宇 on 21/06/2019.
+//
+
+import Foundation
+
+struct BowlingBot {
+    private(set) var game: Game
+    
+    init() {
+        game = Game()
+    }
+    
+    public mutating func generateFullGame() throws {
+        while !game.isGameover {
+            try rollNextBall()
+        }
+    }
+    
+    public mutating func rollNextBall() throws {
+        if let lastFrame = game.frames.last, !lastFrame.isCompleted  {
+            try game.rolledWith(pinsKnockedDown: UInt.random(in: 0...lastFrame.pinsLeft))
+        } else {
+            try game.rolledWith(pinsKnockedDown: UInt.random(in: 0...10))
+        }
+    }
+}

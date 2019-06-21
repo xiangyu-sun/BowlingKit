@@ -21,11 +21,13 @@ public struct Game {
     public var completelyScoredFames: [Frame] { frames.filter{ $0.isCompletelyScored } }
     
     public var nextBallFrameNumber: UInt {
-        let currentFrameDelta: UInt = (frames.last?.isCompleted ?? false) ? 1 : 0
+        let currentFrameDelta: UInt = isNextFrameNew ? 1 : 0
         return min(Game.maximumFrameCount, UInt(frames.count) + currentFrameDelta)
     }
     
     public var isGameover: Bool { completelyScoredFames.count >= Game.maximumFrameCount }
+    
+    var isNextFrameNew: Bool { frames.isEmpty || frames.last?.isCompleted == true }
     
     public init() {}
     
@@ -39,8 +41,12 @@ public struct Game {
         frames.last?.addPinsKnockedDown(pinsKnockedDown)
     }
     
+    public mutating func rolledWith(pinsKnockedDownSequence: [UInt]) throws {
+        try pinsKnockedDownSequence.forEach{ try self.rolledWith(pinsKnockedDown: $0) }
+    }
+    
     func makeNextFrame() -> Frame? {
-        if frames.isEmpty || frames.last?.isCompleted == true {
+        if isNextFrameNew {
             let newFrame = Frame(lastFrame: frames.count == Game.maximumFrameCount - 1 )
             
             if frames.last?.state is StrikeState || frames.last?.state is SpareState {
@@ -51,24 +57,6 @@ public struct Game {
         }
         
         return nil
-    }
-    
-    public mutating func rolledWith(pinsKnockedDownSequence: [UInt]) throws {
-        try pinsKnockedDownSequence.forEach{ try self.rolledWith(pinsKnockedDown: $0) }
-    }
-    
-    mutating func rollNextBall() throws {
-        if let lastFrame = frames.last, !lastFrame.isCompleted  {
-            try rolledWith(pinsKnockedDown: UInt.random(in: 0...lastFrame.pinsLeft))
-        } else {
-            try rolledWith(pinsKnockedDown: UInt.random(in: 0...10))
-        }
-    }
-    
-    public mutating func generateFullGame() throws {
-        while !isGameover {
-            try rollNextBall()
-        }
     }
 }
 

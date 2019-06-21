@@ -13,11 +13,11 @@ public struct StrikeState: CompleteFrameState {
     
     public func ballsForScoring(_ frame: Frame) -> [UInt]? {
 
-        var frames = frame.ballKnockedDownRecord
+        var frames = frame.ballsKnockedDown
         
-        let ballsMissing = ballsRequiredForScoring - frames.count
-        if ballsMissing > 0 {
-            frames.append(contentsOf: frame.getNextBallKnockedDownRecord(count: ballsMissing))
+        let countOfBallsMissing = ballsRequiredForScoring - frames.count
+        if countOfBallsMissing > 0 {
+            frames.append(contentsOf: frame.getNextBallsKnockedDown(count: countOfBallsMissing))
         }
         
         return frames

@@ -12,7 +12,7 @@ public protocol FrameState {
     var maximumBallCount: UInt { get }
     var ballsRequiredForScoring: UInt { get }
     func isFrameCompleted(_ frame: Frame) -> Bool
-    func canBeScored(_ frame: Frame) -> Bool
+    func canScore(_ frame: Frame) -> Bool
     func calcualtedScore(_ frame: Frame) -> UInt
     func ballsForScoring(_ frame: Frame) -> [UInt]?
     func addPinsKnockedDown(_ count: UInt, frame: Frame)
@@ -20,7 +20,7 @@ public protocol FrameState {
 
 public extension FrameState {
     
-    func isFrameCompleted(_ frame: Frame) -> Bool { false }
+    func isFrameCompleted(_ frame: Frame) -> Bool { frame.ballsKnockedDown.count == maximumBallCount }
     
     var maximumBallCount: UInt { 2 }
     
@@ -28,32 +28,29 @@ public extension FrameState {
     
     func calcualtedScore(_ frame: Frame) -> UInt { ballsForScoring(frame)?.sum() ?? 0 }
     
-    func canBeScored(_ frame: Frame) -> Bool { ballsForScoring(frame)?.count == ballsRequiredForScoring }
+    func canScore(_ frame: Frame) -> Bool { ballsForScoring(frame)?.count == ballsRequiredForScoring }
     
-    func ballsForScoring(_ frame: Frame) -> [UInt]? { frame.ballKnockedDownRecord }
+    func ballsForScoring(_ frame: Frame) -> [UInt]? { frame.ballsKnockedDown }
 }
 
 public protocol CompleteFrameState: FrameState {}
 public extension CompleteFrameState {
     var ballsRequiredForScoring: UInt { 3 }
     
-    func isFrameCompleted(_ frame: Frame) -> Bool { true }
-
     func addPinsKnockedDown(_ count: UInt, frame: Frame) {
-        guard frame.ballKnockedDownRecord.count < maximumBallCount else { return }
-        frame.addBallKnockedDownRecord(count: count)
+        guard !isFrameCompleted(frame) else { return }
+        frame.addballsKnockedDown(count: count)
     }
 }
 
-public protocol FinalFrameState: FrameState {}
+public protocol FinalFrameState: CompleteFrameState {}
 public extension FinalFrameState {
-    var maximumBallCount: UInt { 3 }
     
-    func isFrameCompleted(_ frame: Frame) -> Bool { canBeScored(frame) }
+    func isFrameCompleted(_ frame: Frame) -> Bool { canScore(frame) }
     
     func addPinsKnockedDown(_ count: UInt, frame: Frame) {
-        guard !canBeScored(frame) else { return }
-        frame.addBallKnockedDownRecord(count: count)
+        guard !canScore(frame) else { return }
+        frame.addballsKnockedDown(count: count)
     }
 }
 

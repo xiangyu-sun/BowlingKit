@@ -10,14 +10,10 @@ import Foundation
 
 public struct FirstBallRolledState: FrameState {
     public func addPinsKnockedDown(_ count: UInt, frame: Frame) {
-        if frame.ballKnockedDownRecord.count == 0 {
-            frame.addBallKnockedDownRecord(count: count)
-        } else if count == frame.pinsLeft  {
-            frame.state = frame.getSpareState()
-            frame.state.addPinsKnockedDown(count, frame: frame)
+         if count == frame.pinsLeft {
+            frame.state = frame.getSpareState(pinsDown: count)
         } else {
-            frame.state = frame.getMissedState()
-            frame.state.addPinsKnockedDown(count, frame: frame)
+            frame.state = frame.getMissedState(pinsDown: count)
         }
     }
 }
