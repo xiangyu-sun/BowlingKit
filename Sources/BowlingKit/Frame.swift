@@ -23,9 +23,9 @@ public final class Frame {
     
     let isLastFrame: Bool
     
-    var pinsLeft: UInt { Frame.maxiumPinsCount - (ballsKnockedDown.first ?? 0) }
+    var pinsLeft: UInt { Frame.maxiumPinsCount - (pinsKnockedDown.first ?? 0) }
     
-    private(set) var ballsKnockedDown = [UInt]()
+    private(set) var pinsKnockedDown = [UInt]()
     
     public init(lastFrame: Bool = false) {
         self.isLastFrame = lastFrame
@@ -34,12 +34,12 @@ public final class Frame {
     
     public func addPinsKnockedDown(_ count: UInt) { state.addPinsKnockedDown(count, frame: self) }
     
-    func addballsKnockedDown(count: UInt) { ballsKnockedDown.append(count) }
+    func addballsKnockedDown(count: UInt) { pinsKnockedDown.append(count) }
     
     func getNextBallsKnockedDown(count: Int) -> [UInt] {
         guard let scoringFrame = scoringFrame, count != 0 else { return [] }
         
-        let allFrames = scoringFrame.ballsKnockedDown + (scoringFrame.scoringFrame?.ballsKnockedDown ?? [])
+        let allFrames = scoringFrame.pinsKnockedDown + (scoringFrame.scoringFrame?.pinsKnockedDown ?? [])
         
         let ballsKnockDownNeeded = allFrames.count - count
         
@@ -75,5 +75,5 @@ public final class Frame {
 }
 
 extension Frame : CustomDebugStringConvertible {
-    public var debugDescription: String { ballsKnockedDown.debugDescription }
+    public var debugDescription: String { pinsKnockedDown.debugDescription }
 }

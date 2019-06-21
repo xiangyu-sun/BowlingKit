@@ -71,3 +71,9 @@ extension ArraySlice where Element == Frame {
         return map{ $0.calcualtedScore }
     }
 }
+
+extension Game: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return frames.compactMap{ $0.pinsKnockedDown }.debugDescription
+    }
+}
