@@ -7,24 +7,34 @@
 
 import Foundation
 
-public struct BowlingBot {
-    private(set) var game: Game
+public class BowlingBot {
+    public private(set) var game: Game
     
     public init() {
         game = Game()
     }
     
-    public mutating func generateFullGame() throws {
+    public func generateFullGame() throws {
+        if game.isGameover {
+            game = Game()
+        }
+        
         while !game.isGameover {
             try rollNextBall()
         }
     }
     
-    public mutating func rollNextBall() throws {
+    @discardableResult
+    public func rollNextBall() throws -> UInt {
+        let pinsDown: UInt
         if let lastFrame = game.frames.last, !lastFrame.isCompleted  {
+            pinsDown = UInt.random(in: 0...lastFrame.pinsLeft)
             try game.rolledWith(pinsKnockedDown: UInt.random(in: 0...lastFrame.pinsLeft))
         } else {
+            pinsDown = UInt.random(in: 0...10)
             try game.rolledWith(pinsKnockedDown: UInt.random(in: 0...10))
         }
+        
+        return pinsDown
     }
 }
