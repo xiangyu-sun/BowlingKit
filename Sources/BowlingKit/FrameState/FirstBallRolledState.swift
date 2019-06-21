@@ -8,7 +8,7 @@
 
 import Foundation
 
-public final class FirstBallRolledState: FrameState {
+public struct FirstBallRolledState: FrameState {
     public func addPinsKnockedDown(_ count: UInt, frame: Frame) {
         if frame.ballKnockedDownRecord.count == 0 {
             frame.addBallKnockedDownRecord(count: count)

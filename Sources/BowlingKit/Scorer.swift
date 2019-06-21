@@ -11,39 +11,44 @@ import Foundation
 public struct Scorer {
     private(set) var game: Game
     
-    public var frameNumber: String {
-        return String(describing: game.nextBallFrameNumber)
-    }
+    /// returns the number of the frame containing the ball about to be rolled
+    public var frameNumber: String { String(describing: game.nextBallFrameNumber) }
     
-    public var gameIsOver: Bool {
-        return game.isGameover
-    }
+    /// returns true when the tenth frame has been
+    /// scored and false otherwise, and which causes the next roll to start a new
+    /// game
+    public var gameIsOver: Bool { game.isGameover }
     
-    public var scoreSoFar: String {
-        return String(describing: game.frames.mapToScores.sum())
-    }
+    /// returns the score in the game so far
+    public var scoreSoFar: String { String(describing: game.frames.mapToScores.sum()) }
     
     public init() {
         self.game = Game()
     }
     
+    /// given the number of pins knocked down by a roll of the
+    /// ball, returns an array whose length is the number of frames completely scored and whose contents are the cumulative scores for those frames
+    /// - Parameter pinsKnockedDown: pins knocked down by a roll of the
+    /// ball
     @discardableResult
-    public mutating func rolledWith(pinsKnockedDown: UInt) -> [UInt] {
-        if gameIsOver {
+    public mutating func rolledWith(pinsKnockedDown: UInt) throws -> [UInt] {
+
+        do {
+            try game.rolledWith(pinsKnockedDown: pinsKnockedDown)
+        } catch {
             game = Game()
+            try game.rolledWith(pinsKnockedDown: pinsKnockedDown)
         }
-        
-        game.rolledWith(pinsKnockedDown: pinsKnockedDown)
         
         return cuculativeScores(frames: game.completelyScoredFames)
     }
     
     @discardableResult
-    public mutating func rolledWith(pinsKnockedDownSequence: [UInt]) -> [UInt] {
-        return pinsKnockedDownSequence.compactMap { self.rolledWith(pinsKnockedDown: $0) }.last ?? []
+    public mutating func rolledWith(pinsKnockedDownSequence: [UInt]) throws -> [UInt] {
+        try pinsKnockedDownSequence.compactMap { try self.rolledWith(pinsKnockedDown: $0) }.last ?? []
     }
     
     private func cuculativeScores(frames: [Frame]) -> [UInt] {
-        return frames.enumerated().map { frames[...$0.0].mapToScores.sum()}
+        frames.enumerated().map { frames[...$0.0].mapToScores.sum()}
     }
 }

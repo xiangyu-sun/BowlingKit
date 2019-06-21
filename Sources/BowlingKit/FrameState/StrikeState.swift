@@ -8,8 +8,9 @@
 
 import Foundation
 
-public final class StrikeState: CompleteFrameState {
-
+public struct StrikeState: CompleteFrameState {
+    public var maximumBallCount: UInt { 1 }
+    
     public func ballsForScoring(_ frame: Frame) -> [UInt]? {
 
         var frames = frame.ballKnockedDownRecord
@@ -20,15 +21,5 @@ public final class StrikeState: CompleteFrameState {
         }
         
         return frames
-    }
-
-    
-    public var ballsRequiredForScoring: UInt {
-        return 3
-    }
-    
-    public func addPinsKnockedDown(_ count: UInt, frame: Frame) {
-        guard frame.ballKnockedDownRecord.count == 0 else { return }
-        frame.addBallKnockedDownRecord(count: count)
     }
 }

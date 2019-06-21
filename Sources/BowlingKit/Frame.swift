@@ -11,43 +11,30 @@ import Foundation
 public final class Frame {
     
     public static let maxiumPinsCount: UInt = 10
-    
-    private(set) var ballKnockedDownRecord = [UInt]()
-    
     public var state: FrameState
+    
+    public var calcualtedScore: UInt { state.calcualtedScore(self) }
+    
+    public var isCompleted: Bool { state.isFrameCompleted(self) }
+    
+    public var isCompletelyScored: Bool { state.canBeScored(self) }
     
     weak var scoringFrame: Frame?
     
-    let lastFrame: Bool
-
-    public var calcualtedScore: UInt {
-        return state.calcualtedScore(self)
-    }
+    let isLastFrame: Bool
     
-    public var isCompleted: Bool {
-        return state.isFrameCompleted(self)
-    }
+    var pinsLeft: UInt { Frame.maxiumPinsCount - (ballKnockedDownRecord.first ?? 0) }
     
-    public var isCompletelyScored: Bool {
-       return state.canBeScored(self)
-    }
-    
-    var pinsLeft: UInt {
-        return Frame.maxiumPinsCount - (ballKnockedDownRecord.first ?? 0)
-    }
+    private(set) var ballKnockedDownRecord = [UInt]()
     
     public init(lastFrame: Bool = false) {
-        self.lastFrame = lastFrame
+        self.isLastFrame = lastFrame
         self.state = EmptyState()
     }
     
-    public func addPinsKnockedDown(_ count: UInt) {
-        state.addPinsKnockedDown(count, frame: self)
-    }
+    public func addPinsKnockedDown(_ count: UInt) { state.addPinsKnockedDown(count, frame: self) }
     
-    func addBallKnockedDownRecord(count: UInt) {
-        ballKnockedDownRecord.append(count)
-    }
+    func addBallKnockedDownRecord(count: UInt) { ballKnockedDownRecord.append(count) }
     
     func getNextBallKnockedDownRecord(count: Int) -> [UInt] {
         guard let scoringFrame = scoringFrame, count != 0 else { return [] }
@@ -68,19 +55,15 @@ public final class Frame {
         return allFrames
     }
     
-    func getFirstBallRolledState() -> FrameState {
-        return FirstBallRolledState()
-    }
+    func getFirstBallRolledState() -> FrameState { FirstBallRolledState() }
     
-    func getStrikeState() -> FrameState {
-        return lastFrame ? FinalFrameStrikeState() : StrikeState()
-    }
+    func getStrikeState() -> FrameState { isLastFrame ? FinalFrameStrikeState() : StrikeState() }
     
-    func getSpareState() -> FrameState {
-        return lastFrame ? FinalFrameSpareState() : SpareState()
-    }
+    func getSpareState() -> FrameState { isLastFrame ? FinalFrameSpareState() : SpareState() }
     
-    func getMissedState() -> FrameState {
-        return MissedState()
-    }
+    func getMissedState() -> FrameState { MissedState() }
+}
+
+extension Frame : CustomDebugStringConvertible {
+    public var debugDescription: String { ballKnockedDownRecord.debugDescription }
 }

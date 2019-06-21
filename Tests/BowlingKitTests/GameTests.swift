@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import BowlingKit
+@testable import BowlingKit
 
 class GameTests: XCTestCase {
     var game: Game!
@@ -20,16 +20,20 @@ class GameTests: XCTestCase {
     }
     
     func testCompletedFrameWhenOneFrameIncomplete() {
-        game.rolledWith(pinsKnockedDownSequence: [10, 3, 7, 7])
+        try! game.rolledWith(pinsKnockedDownSequence: [10, 3, 7, 7])
         XCTAssertEqual(game.frames.count, 3)
         XCTAssertEqual(game.completelyScoredFames.count, 2)
     }
     
     func testGameStopWhenReachMaxiumFrame() {
-        game.rolledWith(pinsKnockedDownSequence: [10, 3, 7, 7, 0, 10, 4, 6, 2, 3, 10, 2, 8, 10, 3, 5])
+        try! game.rolledWith(pinsKnockedDownSequence: [10, 3, 7, 7, 0, 10, 4, 6, 2, 3, 10, 2, 8, 10, 3, 5])
         XCTAssertEqual(game.frames.count, Int(Game.maximumFrameCount))
-        game.rolledWith(pinsKnockedDown: 9)
-        XCTAssertEqual(game.frames.count, Int(Game.maximumFrameCount))
+        
+        XCTAssertThrowsError(try game.rolledWith(pinsKnockedDown: 9))
     }
     
+    func testAutoRoll() {
+        XCTAssertNoThrow(try game.generateFullGame())
+        XCTAssertEqual(game.frames.count, 10)
+    }
 }

@@ -7,8 +7,7 @@
 //
 
 import XCTest
-import BowlingKit
-
+@testable import BowlingKit
 
 class FrameTests: XCTestCase {
     var frame: Frame!

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public final class EmptyState: FrameState {
+public struct EmptyState: FrameState {
     public func addPinsKnockedDown(_ count: UInt, frame: Frame) {
         frame.state = count == Frame.maxiumPinsCount ? frame.getStrikeState() : frame.getFirstBallRolledState()
         frame.state.addPinsKnockedDown(count, frame: frame)

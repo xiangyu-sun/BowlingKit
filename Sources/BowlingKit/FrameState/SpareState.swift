@@ -8,7 +8,7 @@
 
 import Foundation
 
-public final class SpareState: CompleteFrameState {
+public struct SpareState: CompleteFrameState {
     public func ballsForScoring(_ frame: Frame) -> [UInt]? {
         var frames = frame.ballKnockedDownRecord
         let firstBallOfNextFrame = frame.getNextBallKnockedDownRecord(count: 1)
@@ -16,9 +16,5 @@ public final class SpareState: CompleteFrameState {
             frames.append(contentsOf: firstBallOfNextFrame)
         }
         return frames
-    }
-    
-    public var ballsRequiredForScoring: UInt {
-        return 3
     }
 }
