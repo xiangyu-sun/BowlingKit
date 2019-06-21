@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct BowlingBot {
+public struct BowlingBot {
     private(set) var game: Game
     
-    init() {
+    public init() {
         game = Game()
     }
     
