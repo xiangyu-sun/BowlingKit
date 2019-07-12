@@ -10,6 +10,6 @@ import Foundation
 
 extension Array where Element == UInt {
     func sum() -> UInt {
-        return reduce(0, +)
+        reduce(0, +)
     }
 }

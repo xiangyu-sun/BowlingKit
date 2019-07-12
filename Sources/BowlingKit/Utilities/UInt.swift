@@ -9,12 +9,6 @@
 import Foundation
 
 extension Int {
-    static func == (left: Int, right: UInt) -> Bool {
-        return left == Int(right)
-    }
-}
-
-extension Int {
     static func - (left: UInt, right: Int) -> Int {
         return Int(left) - right
     }

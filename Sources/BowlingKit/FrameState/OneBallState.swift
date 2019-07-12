@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct FirstBallRolledState: FrameState {
+public struct OneBallState: FrameState {
     public func addPinsKnockedDown(_ count: UInt, frame: Frame) {
          if count == frame.pinsLeft {
             frame.state = frame.getSpareState(pinsDown: count)

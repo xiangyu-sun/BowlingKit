@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct EmptyState: FrameState {
+public struct InitialState: FrameState {
     public func addPinsKnockedDown(_ count: UInt, frame: Frame) {
         frame.state = count == Frame.maxiumPinsCount ?
             frame.getStrikeState(pinsDown: count) :

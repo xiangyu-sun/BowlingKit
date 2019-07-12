@@ -12,7 +12,7 @@ enum GameError : Error {
     case gameFinished
 }
 
-public struct Game {
+public final class Game {
     
     public static let maximumFrameCount: UInt = 10
     
@@ -31,7 +31,7 @@ public struct Game {
     
     public init() {}
     
-    public mutating func rolledWith(pinsKnockedDown: UInt) throws {
+    public func rolledWith(pinsKnockedDown: UInt) throws {
         guard !isGameover else { throw GameError.gameFinished }
 
         if let newFrame = makeNextFrame() {
@@ -41,7 +41,7 @@ public struct Game {
         frames.last?.addPinsKnockedDown(pinsKnockedDown)
     }
     
-    public mutating func rolledWith(pinsKnockedDownSequence: [UInt]) throws {
+    public func rolledWith(pinsKnockedDownSequence: [UInt]) throws {
         try pinsKnockedDownSequence.forEach{ try self.rolledWith(pinsKnockedDown: $0) }
     }
     
@@ -57,18 +57,6 @@ public struct Game {
         }
         
         return nil
-    }
-}
-
-extension Array where Element == Frame {
-    var mapToScores: [UInt] {
-        return map{ $0.calcualtedScore }
-    }
-}
-
-extension ArraySlice where Element == Frame {
-    var mapToScores: [UInt] {
-        return map{ $0.calcualtedScore }
     }
 }
 

@@ -29,28 +29,28 @@ public final class Frame {
     
     public init(lastFrame: Bool = false) {
         self.isLastFrame = lastFrame
-        self.state = EmptyState()
+        self.state = InitialState()
     }
     
     public func addPinsKnockedDown(_ count: UInt) { state.addPinsKnockedDown(count, frame: self) }
     
     func addballsKnockedDown(count: UInt) { pinsKnockedDown.append(count) }
     
-    func getNextBallsKnockedDown(count: Int) -> [UInt] {
-        guard let scoringFrame = scoringFrame, count != 0 else { return [] }
+    func getScoringFramePinsKnockedDown(ballIndex: Int) -> [UInt] {
+        guard let scoringFrame = scoringFrame, ballIndex != 0 else { return [] }
         
         let allFrames = scoringFrame.pinsKnockedDown + (scoringFrame.scoringFrame?.pinsKnockedDown ?? [])
         
-        let ballsKnockDownNeeded = allFrames.count - count
+        let ballsKnockDownNeeded = allFrames.count - ballIndex
         
         guard ballsKnockDownNeeded >= 0 else {
             return []
         }
-        return Array(allFrames[..<count])
+        return Array(allFrames[..<ballIndex])
     }
     
     func getFirstBallRolledState(pinsDown: UInt) -> FrameState {
-        let state = FirstBallRolledState()
+        let state = OneBallState()
         state.addPinsKnockedDown(pinsDown, frame: self)
         return state
     }

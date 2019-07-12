@@ -25,7 +25,7 @@ class FrameTests: XCTestCase {
     }
     
     func testNewFrame() {
-        XCTAssertTrue(frame.state is EmptyState)
+        XCTAssertTrue(frame.state is InitialState)
     }
     
     func testStrike() {

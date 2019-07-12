@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Scorer {
+public final class Scorer {
     private(set) var game: Game
     
     /// returns the number of the frame containing the ball about to be rolled
@@ -20,7 +20,7 @@ public struct Scorer {
     public var gameIsOver: Bool { game.isGameover }
     
     /// returns the score in the game so far
-    public var scoreSoFar: String { String(describing: game.frames.mapToScores.sum()) }
+    public var scoreSoFar: String { String(describing: game.frames.lazy.map{ $0.calcualtedScore }.sum()) }
     
     public init() {
         self.game = Game()
@@ -31,7 +31,7 @@ public struct Scorer {
     /// - Parameter pinsKnockedDown: pins knocked down by a roll of the
     /// ball
     @discardableResult
-    public mutating func rolledWith(pinsKnockedDown: UInt) throws -> [UInt] {
+    public func rolledWith(pinsKnockedDown: UInt) throws -> [UInt] {
 
         do {
             try game.rolledWith(pinsKnockedDown: pinsKnockedDown)
@@ -44,11 +44,11 @@ public struct Scorer {
     }
     
     @discardableResult
-    public mutating func rolledWith(pinsKnockedDownSequence: [UInt]) throws -> [UInt] {
+    public func rolledWith(pinsKnockedDownSequence: [UInt]) throws -> [UInt] {
         try pinsKnockedDownSequence.compactMap { try self.rolledWith(pinsKnockedDown: $0) }.last ?? []
     }
     
     private func cuculativeScores(frames: [Frame]) -> [UInt] {
-        frames.enumerated().map { frames[...$0.0].mapToScores.sum()}
+        frames.enumerated().map{ frames[...$0.0].lazy.map{ $0.calcualtedScore }.sum() }
     }
 }

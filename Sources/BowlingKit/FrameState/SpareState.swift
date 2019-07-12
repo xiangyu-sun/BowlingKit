@@ -11,7 +11,7 @@ import Foundation
 public struct SpareState: CompleteFrameState {
     public func ballsForScoring(_ frame: Frame) -> [UInt]? {
         var frames = frame.pinsKnockedDown
-        let firstBallOfNextFrame = frame.getNextBallsKnockedDown(count: 1)
+        let firstBallOfNextFrame = frame.getScoringFramePinsKnockedDown(ballIndex: 1)
         if !firstBallOfNextFrame.isEmpty {
             frames.append(contentsOf: firstBallOfNextFrame)
         }

@@ -17,7 +17,7 @@ public struct StrikeState: CompleteFrameState {
         
         let countOfBallsMissing = ballsRequiredForScoring - frames.count
         if countOfBallsMissing > 0 {
-            frames.append(contentsOf: frame.getNextBallsKnockedDown(count: countOfBallsMissing))
+            frames.append(contentsOf: frame.getScoringFramePinsKnockedDown(ballIndex: countOfBallsMissing))
         }
         
         return frames
