@@ -20,7 +20,7 @@ public final class Game {
     
     public var completelyScoredFames: [Frame] { frames.filter{ $0.isCompletelyScored } }
     
-    public var nextBallFrameNumber: UInt {
+    public var frameIndexForNextBall: UInt {
         let currentFrameDelta: UInt = isNextFrameNew ? 1 : 0
         return min(Game.maximumFrameCount, UInt(frames.count) + currentFrameDelta)
     }

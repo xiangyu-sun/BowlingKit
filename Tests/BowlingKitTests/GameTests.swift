@@ -26,7 +26,7 @@ class GameTests: XCTestCase {
     }
     
     func testNextBallCountInitialState() {
-        XCTAssertEqual(game.nextBallFrameNumber, 1)
+        XCTAssertEqual(game.frameIndexForNextBall, 1)
     }
     
     func testGameStopWhenReachMaxiumFrame() {

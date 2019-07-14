@@ -12,7 +12,7 @@ public final class Scorer {
     private(set) var game: Game
     
     /// returns the number of the frame containing the ball about to be rolled
-    public var frameNumber: String { String(describing: game.nextBallFrameNumber) }
+    public var frameNumber: String { String(describing: game.frameIndexForNextBall) }
     
     /// returns true when the tenth frame has been
     /// scored and false otherwise, and which causes the next roll to start a new

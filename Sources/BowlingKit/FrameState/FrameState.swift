@@ -35,13 +35,38 @@ public extension FrameState {
 
 public protocol CompleteFrameState: FrameState {}
 public extension CompleteFrameState {
+    
     var ballsRequiredForScoring: UInt { 3 }
     
     func addPinsKnockedDown(_ count: UInt, frame: Frame) {
         guard !isFrameCompleted(frame) else { return }
         frame.addballsKnockedDown(count: count)
     }
+    
+    func ballsForScoring(_ frame: Frame) -> [UInt]? {
+        
+        var frames = frame.pinsKnockedDown
+        
+        let countOfBallsMissing = ballsRequiredForScoring - frames.count
+        
+        if countOfBallsMissing > 0 {
+            frames.append(contentsOf: frame.getScoringFramePinsKnockedDown(ballIndex: countOfBallsMissing))
+        }
+        
+        return frames
+    }
 }
+
+public struct MissedState: CompleteFrameState {
+    public var ballsRequiredForScoring: UInt { maximumBallCount }
+}
+
+public struct SpareState: CompleteFrameState {}
+
+public struct StrikeState: CompleteFrameState {
+    public var maximumBallCount: UInt { 1 }
+}
+
 
 public protocol FinalFrameState: CompleteFrameState {}
 public extension FinalFrameState {
@@ -52,10 +77,6 @@ public extension FinalFrameState {
         guard !canScore(frame) else { return }
         frame.addballsKnockedDown(count: count)
     }
-}
-
-public struct MissedState: CompleteFrameState {
-    public var ballsRequiredForScoring: UInt { maximumBallCount }
 }
 
 public struct FinalFrameStrikeState: FinalFrameState {}
