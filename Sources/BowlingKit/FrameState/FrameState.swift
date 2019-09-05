@@ -70,13 +70,7 @@ public struct StrikeState: CompleteFrameState {
 
 public protocol FinalFrameState: CompleteFrameState {}
 public extension FinalFrameState {
-    
     func isFrameCompleted(_ frame: Frame) -> Bool { canScore(frame) }
-    
-    func addPinsKnockedDown(_ count: UInt, frame: Frame) {
-        guard !canScore(frame) else { return }
-        frame.addballsKnockedDown(count: count)
-    }
 }
 
 public struct FinalFrameStrikeState: FinalFrameState {}
