@@ -1,3 +1,4 @@
 # BowlingKit
+[![Build Status](https://travis-ci.com/xiangyu-sun/BowlingKit.svg?branch=master)](https://travis-ci.com/xiangyu-sun/BowlingKit)
 
-A description of this package.
+Swift package for bowling scoring machine
