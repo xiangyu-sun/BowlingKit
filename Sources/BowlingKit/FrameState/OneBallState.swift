@@ -10,7 +10,7 @@ import Foundation
 
 public struct OneBallState: FrameState {
     public func addPinsKnockedDown(_ count: UInt, frame: Frame) {
-         if count == frame.pinsLeft {
+        if count == frame.pinsLeft {
             frame.state = frame.getSpareState(pinsDown: count)
         } else {
             frame.state = frame.getMissedState(pinsDown: count)

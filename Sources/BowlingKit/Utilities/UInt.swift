@@ -10,12 +10,12 @@ import Foundation
 
 extension Int {
     static func - (left: UInt, right: Int) -> Int {
-        return Int(left) - right
+        Int(left) - right
     }
 }
 
 extension Optional where Wrapped == Int {
     static func == (left: Int?, right: UInt) -> Bool {
-        return left == Int(right)
+        left == Int(right)
     }
 }
